@@ -1,6 +1,6 @@
-name: 'Your name here'
-description: 'Provide a description here'
-author: 'Your name or organization here'
+name: 'Page Speed Insights'
+description: 'Analyze your page with Page Speed Insights and get results as PR comments'
+author: 'Jeppe Reinhold'
 inputs:
   milliseconds: # change this
     required: true
