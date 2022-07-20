@@ -1,15 +1,15 @@
 {
-  "plugins": ["@typescript-eslint"],
-  "extends": ["eslint:recommended", "prettier"],
-  "parser": "@typescript-eslint/parser",
-  "parserOptions": {
-    "ecmaVersion": "latest",
-    "sourceType": "module",
-    "project": "./tsconfig.json"
-  },
-  "env": {
-    "node": true,
-    "es6": true
-  },
-  "rules": {}
+	"plugins": ["@typescript-eslint"],
+	"extends": ["eslint:recommended", "prettier"],
+	"parser": "@typescript-eslint/parser",
+	"parserOptions": {
+		"ecmaVersion": "latest",
+		"sourceType": "module",
+		"project": "./tsconfig.json"
+	},
+	"env": {
+		"node": true,
+		"es6": true
+	},
+	"rules": {}
 }
