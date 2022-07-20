@@ -1659,7 +1659,7 @@ Support boolean input list: \`true | True | TRUE | false | False | FALSE\``);
   }
 });
 
-// src/index.ts
+// src/run.ts
 var import_core = __toESM(require_core());
 
 // src/wait.ts
@@ -1672,8 +1672,8 @@ async function wait(milliseconds) {
   });
 }
 
-// src/index.ts
-async function run() {
+// src/run.ts
+var run = async () => {
   try {
     const ms = (0, import_core.getInput)("milliseconds");
     (0, import_core.debug)(`Waiting ${ms} milliseconds ...`);
@@ -1685,6 +1685,8 @@ async function run() {
     if (error instanceof Error)
       (0, import_core.setFailed)(error.message);
   }
-}
+};
+
+// src/index.ts
 run();
 //# sourceMappingURL=index.js.map

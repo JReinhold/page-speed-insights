@@ -11,7 +11,7 @@ jobs:
     name: Check Formatting
     runs-on: ubuntu-latest
     steps:
-      - name: Clone repository
+      - name: Checkout repository
         uses: actions/checkout@v3
 
       - name: Prepare dependencies
@@ -24,7 +24,7 @@ jobs:
     name: Lint
     runs-on: ubuntu-latest
     steps:
-      - name: Clone repository
+      - name: Checkout repository
         uses: actions/checkout@v3
 
       - name: Prepare dependencies
@@ -37,7 +37,7 @@ jobs:
     name: Check Types
     runs-on: ubuntu-latest
     steps:
-      - name: Clone repository
+      - name: Checkout repository
         uses: actions/checkout@v3
 
       - name: Prepare dependencies
@@ -50,7 +50,7 @@ jobs:
     name: Test
     runs-on: ubuntu-latest
     steps:
-      - name: Clone repository
+      - name: Checkout repository
         uses: actions/checkout@v3
 
       - name: Prepare dependencies
@@ -63,7 +63,7 @@ jobs:
     name: Build and check dist
     runs-on: ubuntu-latest
     steps:
-      - name: Clone repository
+      - name: Checkout repository
         uses: actions/checkout@v3
 
       - name: Prepare dependencies
@@ -87,12 +87,3 @@ jobs:
         with:
           name: dist
           path: dist/
-
-  test-action:
-    name: Execute action
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: ./
-        with:
-          milliseconds: 1000

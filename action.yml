@@ -1,11 +1,42 @@
 name: 'Page Speed Insights'
 description: 'Analyze your page with Page Speed Insights and get results as PR comments'
 author: 'Jeppe Reinhold'
-inputs:
-  milliseconds: # change this
-    required: true
-    description: 'input description here'
-    default: 'default value if applicable'
+branding:
+  icon: 'cpu'
+  color: 'blue'
 runs:
   using: 'node16'
   main: 'dist/index.js'
+
+inputs:
+  url:
+    description: The URL to analyze
+    required: true
+  key:
+    description: The optional API Key created at the Google Developer Console
+    required: false
+  strategy:
+    description: Analyse on 'desktop', 'mobile' or 'both' (default)
+    required: false
+    default: 'both'
+  runs:
+    description: The number of times to analyse the site
+    required: false
+    default: '1'
+  comment:
+    description: Comment the result if in a Pull Request. 'create' a new one each after run, 'update' (default) the same one, or 'false' to disable commenting
+    required: false
+    default: 'update'
+  threshold:
+    required: false
+    description: A threshold to pass for the action to succeed
+    default: 'false'
+  compareUrl:
+    required: false
+    description: Another site to analyse and compare against
+
+outputs:
+  resultJSON:
+    description: Raw result as a JSON string
+  resultMarkdown:
+    description: Result presented in a markdown table
