@@ -1565,11 +1565,11 @@ var require_core = __commonJS({
 Support boolean input list: \`true | True | TRUE | false | False | FALSE\``);
     }
     exports.getBooleanInput = getBooleanInput;
-    function setOutput2(name, value) {
+    function setOutput(name, value) {
       process.stdout.write(os.EOL);
       command_1.issueCommand("set-output", { name }, value);
     }
-    exports.setOutput = setOutput2;
+    exports.setOutput = setOutput;
     function setCommandEcho(enabled) {
       command_1.issue("echo", enabled ? "on" : "off");
     }
@@ -1660,30 +1660,50 @@ Support boolean input list: \`true | True | TRUE | false | False | FALSE\``);
 });
 
 // src/run.ts
-var import_core = __toESM(require_core());
+var import_core2 = __toESM(require_core());
 
-// src/wait.ts
-async function wait(milliseconds) {
-  return new Promise((resolve) => {
-    if (isNaN(milliseconds)) {
-      throw new Error("milliseconds not a number");
-    }
-    setTimeout(() => resolve("done!"), milliseconds);
-  });
-}
+// src/lib/get-inputs.ts
+var import_core = __toESM(require_core());
+var getInputs = () => {
+  (0, import_core.debug)("Getting inputs...");
+  const url = (0, import_core.getInput)("url", { required: true });
+  const runs = parseInt((0, import_core.getInput)("runs", { required: true }), 10);
+  if (!runs) {
+    throw new Error(`Invalid 'runs' input. Got '${(0, import_core.getInput)("runs", {
+      required: true
+    })}' but only integers are valid.`);
+  }
+  const threshold = parseInt((0, import_core.getInput)("threshold"), 10) || void 0;
+  const compareUrl = (0, import_core.getInput)("compareUrl") || void 0;
+  const strategy = (0, import_core.getInput)("strategy", { required: true });
+  if (strategy !== "desktop" && strategy !== "mobile" && strategy !== "both") {
+    throw new Error(`Invalid 'strategy' input. Got '${strategy}' but only 'desktop', 'mobile' or 'both' are valid.`);
+  }
+  let comment = (0, import_core.getInput)("comment", { required: true });
+  comment = comment === "false" ? false : comment;
+  if (comment !== "create" && comment !== "update" && comment !== false) {
+    throw new Error(`Invalid 'comment' input. Got '${comment}' but only 'create', 'update' or 'false' are valid.`);
+  }
+  const result = {
+    url,
+    runs,
+    strategy,
+    comment,
+    threshold,
+    compareUrl
+  };
+  (0, import_core.debug)("Got inputs");
+  (0, import_core.debug)(JSON.stringify(result, null, 2));
+  return result;
+};
 
 // src/run.ts
 var run = async () => {
   try {
-    const ms = (0, import_core.getInput)("milliseconds");
-    (0, import_core.debug)(`Waiting ${ms} milliseconds ...`);
-    (0, import_core.debug)(new Date().toTimeString());
-    await wait(parseInt(ms, 10));
-    (0, import_core.debug)(new Date().toTimeString());
-    (0, import_core.setOutput)("time", new Date().toTimeString());
+    const inputs = getInputs();
   } catch (error) {
     if (error instanceof Error)
-      (0, import_core.setFailed)(error.message);
+      (0, import_core2.setFailed)(error.message);
   }
 };
 
