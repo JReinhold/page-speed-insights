@@ -12,6 +12,13 @@ type Inputs = {
 export const getInputs = (): Inputs => {
 	const url = getInput('url', { required: true });
 	const runs = parseInt(getInput('runs', { required: true }), 10);
+	if (!runs) {
+		throw new Error(
+			`Invalid 'runs' input. Got '${getInput('runs', {
+				required: true,
+			})}' but only integers are valid.`,
+		);
+	}
 	const threshold = parseInt(getInput('threshold'), 10) || undefined;
 	const compareUrl = getInput('compareUrl') || undefined;
 
