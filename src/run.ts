@@ -1,8 +1,10 @@
-import { debug, setOutput, setFailed } from '@actions/core';
+import { setFailed } from '@actions/core';
+import { getInputs } from './lib/get-inputs';
 
 export const run = async (): Promise<void> => {
 	try {
-		// TODO: get and parse inputs
+		// eslint-disable-next-line no-unused-vars
+		const inputs = getInputs();
 
 		// TODO: analyse url
 
@@ -15,11 +17,6 @@ export const run = async (): Promise<void> => {
 		// TODO: comment
 
 		// TODO: fail or pass from threshold input
-
-		debug(new Date().toTimeString());
-		debug(new Date().toTimeString());
-
-		setOutput('time', new Date().toTimeString());
 	} catch (error) {
 		if (error instanceof Error) setFailed(error.message);
 	}

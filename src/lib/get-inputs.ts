@@ -1,4 +1,4 @@
-import { getInput } from '@actions/core';
+import { debug, getInput } from '@actions/core';
 
 type Inputs = {
 	url: string;
@@ -10,6 +10,7 @@ type Inputs = {
 };
 
 export const getInputs = (): Inputs => {
+	debug('Getting inputs...');
 	const url = getInput('url', { required: true });
 	const runs = parseInt(getInput('runs', { required: true }), 10);
 	if (!runs) {
@@ -36,5 +37,16 @@ export const getInputs = (): Inputs => {
 			`Invalid 'comment' input. Got '${comment}' but only 'create', 'update' or 'false' are valid.`,
 		);
 	}
-	return { url, runs, strategy, comment, threshold, compareUrl };
+
+	const result = {
+		url,
+		runs,
+		strategy,
+		comment,
+		threshold,
+		compareUrl,
+	} as const;
+	debug('Got inputs');
+	debug(JSON.stringify(result, null, 2));
+	return result;
 };
