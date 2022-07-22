@@ -1,12 +1,11 @@
 import { setFailed } from '@actions/core';
+import { analyse } from './lib/analyse';
 import { getInputs } from './lib/get-inputs';
 
 export const run = async (): Promise<void> => {
 	try {
-		// eslint-disable-next-line no-unused-vars
 		const inputs = getInputs();
-
-		// TODO: analyse url
+		await analyse(inputs);
 
 		// TODO: analyse compareUrl
 

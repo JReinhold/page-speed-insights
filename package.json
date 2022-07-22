@@ -12,6 +12,7 @@
 		"lint": "eslint ./**/*.ts",
 		"lint:fix": "eslint ./**/*.ts --fix",
 		"test": "vitest",
+		"test:e2e": "E2E_TEST=true vitest run e2e",
 		"type-check": "tsc --noEmit",
 		"type-check:watch": "tsc --noEmit --watch",
 		"validate": "pnpm format:check && pnpm lint && pnpm test && pnpm build && pnpm build",
@@ -29,6 +30,7 @@
 	],
 	"devDependencies": {
 		"@actions/core": "^1.6.0",
+		"@actions/http-client": "^2.0.1",
 		"@tsconfig/node16-strictest-esm": "^1.0.3",
 		"@types/node": "^18.0.6",
 		"@typescript-eslint/parser": "^5.8.1",

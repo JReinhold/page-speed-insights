@@ -349,7 +349,7 @@ var require_tunnel = __commonJS({
         connectOptions.headers = connectOptions.headers || {};
         connectOptions.headers["Proxy-Authorization"] = "Basic " + new Buffer(connectOptions.proxyAuth).toString("base64");
       }
-      debug2("making CONNECT request");
+      debug3("making CONNECT request");
       var connectReq = self.request(connectOptions);
       connectReq.useChunkedEncodingByDefault = false;
       connectReq.once("response", onResponse);
@@ -369,7 +369,7 @@ var require_tunnel = __commonJS({
         connectReq.removeAllListeners();
         socket.removeAllListeners();
         if (res.statusCode !== 200) {
-          debug2("tunneling socket could not be established, statusCode=%d", res.statusCode);
+          debug3("tunneling socket could not be established, statusCode=%d", res.statusCode);
           socket.destroy();
           var error = new Error("tunneling socket could not be established, statusCode=" + res.statusCode);
           error.code = "ECONNRESET";
@@ -378,7 +378,7 @@ var require_tunnel = __commonJS({
           return;
         }
         if (head.length > 0) {
-          debug2("got illegal response body from proxy");
+          debug3("got illegal response body from proxy");
           socket.destroy();
           var error = new Error("got illegal response body from proxy");
           error.code = "ECONNRESET";
@@ -386,13 +386,13 @@ var require_tunnel = __commonJS({
           self.removeSocket(placeholder);
           return;
         }
-        debug2("tunneling connection has established");
+        debug3("tunneling connection has established");
         self.sockets[self.sockets.indexOf(placeholder)] = socket;
         return cb(socket);
       }
       function onError(cause) {
         connectReq.removeAllListeners();
-        debug2("tunneling socket could not be established, cause=%s\n", cause.message, cause.stack);
+        debug3("tunneling socket could not be established, cause=%s\n", cause.message, cause.stack);
         var error = new Error("tunneling socket could not be established, cause=" + cause.message);
         error.code = "ECONNRESET";
         options.request.emit("error", error);
@@ -450,9 +450,9 @@ var require_tunnel = __commonJS({
       }
       return target;
     }
-    var debug2;
+    var debug3;
     if (process.env.NODE_DEBUG && /\btunnel\b/.test(process.env.NODE_DEBUG)) {
-      debug2 = function() {
+      debug3 = function() {
         var args = Array.prototype.slice.call(arguments);
         if (typeof args[0] === "string") {
           args[0] = "TUNNEL: " + args[0];
@@ -462,10 +462,10 @@ var require_tunnel = __commonJS({
         console.error.apply(console, args);
       };
     } else {
-      debug2 = function() {
+      debug3 = function() {
       };
     }
-    exports.debug = debug2;
+    exports.debug = debug3;
   }
 });
 
@@ -633,7 +633,7 @@ var require_lib = __commonJS({
       return parsedUrl.protocol === "https:";
     }
     exports.isHttps = isHttps;
-    var HttpClient = class {
+    var HttpClient2 = class {
       constructor(userAgent, handlers, requestOptions) {
         this._ignoreSslError = false;
         this._allowRedirects = true;
@@ -1023,7 +1023,7 @@ var require_lib = __commonJS({
         });
       }
     };
-    exports.HttpClient = HttpClient;
+    exports.HttpClient = HttpClient2;
     var lowercaseKeys = (obj) => Object.keys(obj).reduce((c, k) => (c[k.toLowerCase()] = obj[k], c), {});
   }
 });
@@ -1583,18 +1583,18 @@ Support boolean input list: \`true | True | TRUE | false | False | FALSE\``);
       return process.env["RUNNER_DEBUG"] === "1";
     }
     exports.isDebug = isDebug;
-    function debug2(message) {
+    function debug3(message) {
       command_1.issueCommand("debug", {}, message);
     }
-    exports.debug = debug2;
+    exports.debug = debug3;
     function error(message, properties = {}) {
       command_1.issueCommand("error", utils_1.toCommandProperties(properties), message instanceof Error ? message.toString() : message);
     }
     exports.error = error;
-    function warning(message, properties = {}) {
+    function warning2(message, properties = {}) {
       command_1.issueCommand("warning", utils_1.toCommandProperties(properties), message instanceof Error ? message.toString() : message);
     }
-    exports.warning = warning;
+    exports.warning = warning2;
     function notice(message, properties = {}) {
       command_1.issueCommand("notice", utils_1.toCommandProperties(properties), message instanceof Error ? message.toString() : message);
     }
@@ -1660,40 +1660,77 @@ Support boolean input list: \`true | True | TRUE | false | False | FALSE\``);
 });
 
 // src/run.ts
-var import_core2 = __toESM(require_core());
+var import_core3 = __toESM(require_core());
+
+// src/lib/analyse.ts
+var import_core = __toESM(require_core());
+var import_http_client = __toESM(require_lib());
+var httpClient = new import_http_client.HttpClient();
+var STRATEGY_PARAMETER_MAP = {
+  both: "STRATEGY_UNSPECIFIED",
+  desktop: "DESKTOP",
+  mobile: "MOBILE"
+};
+var analyse = async (inputs) => {
+  if (inputs.runs === 1) {
+    (0, import_core.debug)("Analysing a single run");
+    return analyseSingleRun(inputs);
+  }
+};
+var analyseSingleRun = async (inputs) => {
+  const url = new URL("https://pagespeedonline.googleapis.com/pagespeedonline/v5/runPagespeed");
+  url.searchParams.set("url", inputs.url);
+  url.searchParams.set("strategy", STRATEGY_PARAMETER_MAP[inputs.strategy]);
+  if (inputs.key) {
+    url.searchParams.set("api", inputs.key);
+  }
+  (0, import_core.debug)(`Calling PageSpeed Insights API with: ${url.href}`);
+  const preTime = Date.now();
+  const response = await httpClient.getJson(url.href);
+  const postTime = Date.now();
+  (0, import_core.debug)(`Response from PageSpeed Insights API after ${(postTime - preTime) / 1e3} seconds`);
+  (0, import_core.debug)(`Status: ${response.statusCode}`);
+  console.log(response);
+};
 
 // src/lib/get-inputs.ts
-var import_core = __toESM(require_core());
+var import_core2 = __toESM(require_core());
 var getInputs = () => {
-  (0, import_core.debug)("Getting inputs...");
-  const url = (0, import_core.getInput)("url", { required: true });
-  const runs = parseInt((0, import_core.getInput)("runs", { required: true }), 10);
+  (0, import_core2.debug)("Getting inputs...");
+  const url = (0, import_core2.getInput)("url", { required: true });
+  const key = (0, import_core2.getInput)("key") || void 0;
+  if (!key) {
+    (0, import_core2.warning)(`No API key provided via the 'key' input, you're likely to hit rate limits without an API key.
+		See https://developers.google.com/speed/docs/insights/v5/get-started#key for how to get an API key.`);
+  }
+  const runs = parseInt((0, import_core2.getInput)("runs", { required: true }), 10);
   if (!runs) {
-    throw new Error(`Invalid 'runs' input. Got '${(0, import_core.getInput)("runs", {
+    throw new Error(`Invalid 'runs' input. Got '${(0, import_core2.getInput)("runs", {
       required: true
     })}' but only integers are valid.`);
   }
-  const threshold = parseInt((0, import_core.getInput)("threshold"), 10) || void 0;
-  const compareUrl = (0, import_core.getInput)("compareUrl") || void 0;
-  const strategy = (0, import_core.getInput)("strategy", { required: true });
+  const threshold = parseInt((0, import_core2.getInput)("threshold"), 10) || void 0;
+  const compareUrl = (0, import_core2.getInput)("compareUrl") || void 0;
+  const strategy = (0, import_core2.getInput)("strategy", { required: true });
   if (strategy !== "desktop" && strategy !== "mobile" && strategy !== "both") {
     throw new Error(`Invalid 'strategy' input. Got '${strategy}' but only 'desktop', 'mobile' or 'both' are valid.`);
   }
-  let comment = (0, import_core.getInput)("comment", { required: true });
+  let comment = (0, import_core2.getInput)("comment", { required: true });
   comment = comment === "false" ? false : comment;
   if (comment !== "create" && comment !== "update" && comment !== false) {
     throw new Error(`Invalid 'comment' input. Got '${comment}' but only 'create', 'update' or 'false' are valid.`);
   }
   const result = {
     url,
+    key,
     runs,
     strategy,
     comment,
     threshold,
     compareUrl
   };
-  (0, import_core.debug)("Got inputs");
-  (0, import_core.debug)(JSON.stringify(result, null, 2));
+  (0, import_core2.debug)("Got inputs");
+  (0, import_core2.debug)(JSON.stringify(result, null, 2));
   return result;
 };
 
@@ -1701,9 +1738,10 @@ var getInputs = () => {
 var run = async () => {
   try {
     const inputs = getInputs();
+    await analyse(inputs);
   } catch (error) {
     if (error instanceof Error)
-      (0, import_core2.setFailed)(error.message);
+      (0, import_core3.setFailed)(error.message);
   }
 };
 

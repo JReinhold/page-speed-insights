@@ -14,6 +14,7 @@ const getInputMock = vi.mocked(getInput);
 
 const baseValidInputs: Record<string, string | number> = {
 	url: 'https://reinhold.is/mock',
+	key: 'someApiKey',
 	runs: 5,
 	strategy: 'desktop',
 	comment: 'create',
@@ -28,9 +29,7 @@ describe('Get Inputs', () => {
 
 	it('should get all inputs', () => {
 		// Arrange - mock inputs
-		getInputMock.mockImplementation((inputName) =>
-			baseValidInputs[inputName]!.toString(),
-		);
+		getInputMock.mockImplementation((inputName) => baseValidInputs[inputName]!.toString());
 
 		// Act - get inputs
 		const result = getInputs();
@@ -45,15 +44,11 @@ describe('Get Inputs', () => {
 			...baseValidInputs,
 			runs: 'not valid',
 		};
-		getInputMock.mockImplementation((inputName) =>
-			inputMocks[inputName]!.toString(),
-		);
+		getInputMock.mockImplementation((inputName) => inputMocks[inputName]!.toString());
 
 		// Act & Assert - get inputs should throw
 		expect(() => getInputs()).toThrowError(
-			new Error(
-				"Invalid 'runs' input. Got 'not valid' but only integers are valid.",
-			),
+			new Error("Invalid 'runs' input. Got 'not valid' but only integers are valid."),
 		);
 	});
 
@@ -63,9 +58,7 @@ describe('Get Inputs', () => {
 			...baseValidInputs,
 			strategy: 'command and conquer',
 		};
-		getInputMock.mockImplementation((inputName) =>
-			inputMocks[inputName]!.toString(),
-		);
+		getInputMock.mockImplementation((inputName) => inputMocks[inputName]!.toString());
 
 		// Act & Assert - get inputs should throw
 		expect(() => getInputs()).toThrowError(
@@ -81,15 +74,11 @@ describe('Get Inputs', () => {
 			...baseValidInputs,
 			comment: 'not valid',
 		};
-		getInputMock.mockImplementation((inputName) =>
-			inputMocks[inputName]!.toString(),
-		);
+		getInputMock.mockImplementation((inputName) => inputMocks[inputName]!.toString());
 
 		// Act & Assert - get inputs should throw
 		expect(() => getInputs()).toThrowError(
-			new Error(
-				"Invalid 'comment' input. Got 'not valid' but only 'create', 'update' or 'false' are valid.",
-			),
+			new Error("Invalid 'comment' input. Got 'not valid' but only 'create', 'update' or 'false' are valid."),
 		);
 	});
 });
