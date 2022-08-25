@@ -1,0 +1,117 @@
+[
+	{
+		"_id": "4ae92895-f083-4d97-babe-c3d357edf81c",
+		"colId": "61dea468-c567-4be5-92e1-0550fd2cc7a6",
+		"containerId": "",
+		"name": "reinhold.is - both strategies",
+		"url": "https://pagespeedonline.googleapis.com/pagespeedonline/v5/runPagespeed?url=https://reinhold.is&strategy=STRATEGY_UNSPECIFIED&key={{VITE_API_KEY}}",
+		"method": "GET",
+		"sortNum": 10000,
+		"created": "2022-08-25T21:02:58.691Z",
+		"modified": "2022-08-25T21:02:58.691Z",
+		"headers": [],
+		"params": [
+			{
+				"name": "url",
+				"value": "https://reinhold.is",
+				"isPath": false
+			},
+			{
+				"name": "strategy",
+				"value": "STRATEGY_UNSPECIFIED",
+				"isPath": false
+			},
+			{
+				"name": "key",
+				"value": "{{VITE_API_KEY}}",
+				"isPath": false
+			}
+		],
+		"tests": []
+	},
+	{
+		"_id": "5c3cf640-a6e3-478b-909a-392c39a28c37",
+		"colId": "61dea468-c567-4be5-92e1-0550fd2cc7a6",
+		"containerId": "",
+		"name": "reinhold.is - desktop",
+		"url": "https://pagespeedonline.googleapis.com/pagespeedonline/v5/runPagespeed?url=https://reinhold.is&strategy=DESKTOP&key={{VITE_API_KEY}}",
+		"method": "GET",
+		"sortNum": 20000,
+		"created": "2022-08-25T21:03:07.884Z",
+		"modified": "2022-08-25T21:03:35.577Z",
+		"headers": [],
+		"params": [
+			{
+				"name": "url",
+				"value": "https://reinhold.is",
+				"isPath": false
+			},
+			{
+				"name": "strategy",
+				"value": "DESKTOP",
+				"isPath": false
+			},
+			{
+				"name": "key",
+				"value": "{{VITE_API_KEY}}",
+				"isPath": false
+			}
+		],
+		"tests": []
+	},
+	{
+		"_id": "68212189-c874-4861-ac02-aa69ecca9b1d",
+		"colId": "61dea468-c567-4be5-92e1-0550fd2cc7a6",
+		"containerId": "",
+		"name": "reinhold.is - mobile",
+		"url": "https://pagespeedonline.googleapis.com/pagespeedonline/v5/runPagespeed?url=https://reinhold.is&strategy=MOBILE&key={{VITE_API_KEY}}",
+		"method": "GET",
+		"sortNum": 30000,
+		"created": "2022-08-25T21:03:29.520Z",
+		"modified": "2022-08-25T21:03:57.161Z",
+		"headers": [],
+		"params": [
+			{
+				"name": "url",
+				"value": "https://reinhold.is",
+				"isPath": false
+			},
+			{
+				"name": "strategy",
+				"value": "MOBILE",
+				"isPath": false
+			},
+			{
+				"name": "key",
+				"value": "{{VITE_API_KEY}}",
+				"isPath": false
+			}
+		],
+		"tests": []
+	},
+	{
+		"_id": "307bf6eb-6e57-42e5-81b4-122e63db7a3b",
+		"colId": "61dea468-c567-4be5-92e1-0550fd2cc7a6",
+		"containerId": "",
+		"name": "Rate limited",
+		"url": "https://pagespeedonline.googleapis.com/pagespeedonline/v5/runPagespeed?url=https://reinhold.is&strategy=STRATEGY_UNSPECIFIED",
+		"method": "GET",
+		"sortNum": 40000,
+		"created": "2022-08-25T21:03:31.540Z",
+		"modified": "2022-08-25T21:04:17.410Z",
+		"headers": [],
+		"params": [
+			{
+				"name": "url",
+				"value": "https://reinhold.is",
+				"isPath": false
+			},
+			{
+				"name": "strategy",
+				"value": "STRATEGY_UNSPECIFIED",
+				"isPath": false
+			}
+		],
+		"tests": []
+	}
+]

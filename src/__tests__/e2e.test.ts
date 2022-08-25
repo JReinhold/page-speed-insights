@@ -93,7 +93,7 @@ Get one from
 https://developers.google.com/speed/docs/insights/v5/get-started#key
 and add it to a ".env.test" file with the content:
 
-VITE_API_KEY="<YOUR-KEY>"
+VITE_API_KEY=<YOUR-KEY>
 `);
 		}
 	});

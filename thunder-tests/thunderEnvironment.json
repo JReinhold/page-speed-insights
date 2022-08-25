@@ -1,0 +1,23 @@
+[
+	{
+		"_id": "c0be5ca2-7ba8-4090-9158-39f0b858628e",
+		"name": "(Local Env)",
+		"default": false,
+		"global": true,
+		"local": true,
+		"sortNum": -2,
+		"created": "2022-08-25T20:54:58.062Z",
+		"modified": "2022-08-25T20:54:58.062Z",
+		"data": []
+	},
+	{
+		"_id": "60131dee-876d-4875-83ab-e142ae578ba6",
+		"name": "Page Speed Insights Action",
+		"default": true,
+		"sortNum": 10000,
+		"created": "2022-08-25T20:55:10.384Z",
+		"modified": "2022-08-25T21:01:36.188Z",
+		"data": [],
+		"envFile": "../.env.test"
+	}
+]
