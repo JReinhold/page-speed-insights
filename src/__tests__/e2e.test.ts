@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, beforeAll, beforeEach } from 'vitest';
 import { execPath } from 'process';
 import * as childProcess from 'child_process';
 import { join } from 'path';
@@ -72,10 +72,12 @@ describe('Input environment variable utilities', () => {
 	});
 });
 
-describe('End to end tests', () => {
-	// shows how the runner will run a javascript action with env / stdout protocol
-	it.runIf(process.env['E2E_TEST'] === 'true')('executes e2e', () => {
-		// Arrange build source
+describe.runIf(process.env['E2E_TEST'] === 'true')('End to end tests', () => {
+	const cleanEnv = { ...process.env };
+
+	beforeAll(() => {
+		// Arrange - build source
+		console.log('Building source...');
 		const buildStdout = childProcess.execSync('pnpm build', {
 			shell: '/bin/sh',
 			cwd: join(__dirname, '..'),
@@ -83,13 +85,22 @@ describe('End to end tests', () => {
 			encoding: 'utf8',
 		});
 		console.log(buildStdout);
+		console.log('Done building source');
+	});
 
-		// Arrange set up minimal inputs and environment
+	beforeEach(() => {
+		// Arrange - clean environment variables
+		process.env = cleanEnv;
+	});
+
+	// shows how the runner will run a javascript action with env / stdout protocol
+	it('should work with minimal base case', () => {
+		// Arrange - set up minimal inputs and environment
 		assignInputsToEnvVars({
 			url: 'https://reinhold.is',
 			comment: 'create',
 			compareUrl: undefined,
-			key: 'AIzaSyB4EI8Z4RCIXUu47',
+			key: 'AIzaSyB4EI8Z4RCIXUu47-l3Qg8rqQtADv5N3i4',
 			runs: 1,
 			strategy: 'desktop',
 			threshold: undefined,
@@ -101,7 +112,7 @@ describe('End to end tests', () => {
 			encoding: 'utf8',
 		});
 
-		// Assert show output
+		// Assert - show output
 		console.log(stdout);
 	});
 });

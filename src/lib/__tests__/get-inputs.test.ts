@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { getInputs } from './get-inputs';
+import { getInputs } from '../get-inputs';
 import { getInput } from '@actions/core';
 
 vi.mock('@actions/core', async () => {

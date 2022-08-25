@@ -1,11 +1,13 @@
-import { debug, getInput, warning } from '@actions/core';
+import { debug, getInput, setSecret, warning } from '@actions/core';
 import type { Inputs } from '../../declarations';
 
 export const getInputs = (): Inputs => {
 	debug('Getting inputs...');
 	const url = getInput('url', { required: true });
 	const key = getInput('key') || undefined;
-	if (!key) {
+	if (key) {
+		setSecret(key);
+	} else {
 		warning(`No API key provided via the 'key' input, you're likely to hit rate limits without an API key.
 		See https://developers.google.com/speed/docs/insights/v5/get-started#key for how to get an API key.`);
 	}
@@ -41,6 +43,7 @@ export const getInputs = (): Inputs => {
 		compareUrl,
 	} as const;
 	debug('Got inputs');
-	debug(JSON.stringify(result, null, 2));
+	// debug(key);
+	debug(JSON.stringify(result));
 	return result;
 };
