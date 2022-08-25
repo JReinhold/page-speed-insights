@@ -36,22 +36,26 @@ const analyseSingleRun = async (inputs: Inputs) => {
 		if (err instanceof HttpClientError) {
 			if (err.statusCode === HttpCodes.TooManyRequests) {
 				error(
-					"Quota limit exceeded. Either you're not using an API key, or you've made too many calls with this API key. Try again later.",
+					`Quota limit exceeded. Either you're not using an API key, or you've made too many calls with this API key. Try again later.
+${err.message}`,
 				);
 			}
-			error(err);
 		} else if (err instanceof Error) {
-			error('Unknown error');
-			error(err.message);
+			error(`Unknown error:
+${err.message}`);
 		} else {
-			error('Unknown error');
-			error(err as any);
+			error(`Unknown error:
+${err as any}`);
 		}
 		throw err;
 	}
 	const postTime = Date.now();
 	debug(`Response from PageSpeed Insights API after ${(postTime - preTime) / 1000} seconds`);
 	debug(`Status: ${response.statusCode}`);
+
+	// TODO: validate minimal response with zod
+	// TODO: get main score from response
+	// TODO: define what the minimal analyze output structure is - with zod
 
 	// console.log(JSON.stringify(response));
 };
