@@ -1,6 +1,7 @@
 import { debug, error } from '@actions/core';
 import { HttpClient, HttpClientError, HttpCodes } from '@actions/http-client';
 import type { Inputs } from '../../declarations';
+import { maskedDebug } from './utils';
 
 const httpClient = new HttpClient();
 
@@ -25,7 +26,7 @@ const analyseSingleRun = async (inputs: Inputs) => {
 		url.searchParams.set('key', inputs.key);
 	}
 
-	debug(`Calling PageSpeed Insights API with: ${url.href}`);
+	maskedDebug(`Calling PageSpeed Insights API with: ${url.href}`);
 	const preTime = Date.now();
 	let response;
 	try {
@@ -52,5 +53,5 @@ const analyseSingleRun = async (inputs: Inputs) => {
 	debug(`Response from PageSpeed Insights API after ${(postTime - preTime) / 1000} seconds`);
 	debug(`Status: ${response.statusCode}`);
 
-	console.log(JSON.stringify(response));
+	// console.log(JSON.stringify(response));
 };

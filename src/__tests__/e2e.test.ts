@@ -86,6 +86,16 @@ describe.runIf(process.env['E2E_TEST'] === 'true')('End to end tests', () => {
 		});
 		console.log(buildStdout);
 		console.log('Done building source');
+
+		if (!process.env['VITE_API_KEY']) {
+			throw new Error(`E2E tests need a valid API key in the environment but none was found.
+Get one from
+https://developers.google.com/speed/docs/insights/v5/get-started#key
+and add it to a ".env.test" file with the content:
+
+VITE_API_KEY="<YOUR-KEY>"
+`);
+		}
 	});
 
 	beforeEach(() => {
@@ -100,7 +110,7 @@ describe.runIf(process.env['E2E_TEST'] === 'true')('End to end tests', () => {
 			url: 'https://reinhold.is',
 			comment: 'create',
 			compareUrl: undefined,
-			key: 'AIzaSyB4EI8Z4RCIXUu47-l3Qg8rqQtADv5N3i4',
+			key: process.env['VITE_API_KEY'],
 			runs: 1,
 			strategy: 'desktop',
 			threshold: undefined,

@@ -1,5 +1,6 @@
 import { debug, getInput, setSecret, warning } from '@actions/core';
 import type { Inputs } from '../../declarations';
+import { maskedDebug } from './utils';
 
 export const getInputs = (): Inputs => {
 	debug('Getting inputs...');
@@ -43,7 +44,6 @@ export const getInputs = (): Inputs => {
 		compareUrl,
 	} as const;
 	debug('Got inputs');
-	// debug(key);
-	debug(JSON.stringify(result));
+	maskedDebug(JSON.stringify(result));
 	return result;
 };
