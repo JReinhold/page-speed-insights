@@ -1,35 +1,5 @@
 [
 	{
-		"_id": "4ae92895-f083-4d97-babe-c3d357edf81c",
-		"colId": "61dea468-c567-4be5-92e1-0550fd2cc7a6",
-		"containerId": "",
-		"name": "reinhold.is - both strategies",
-		"url": "https://pagespeedonline.googleapis.com/pagespeedonline/v5/runPagespeed?url=https://reinhold.is&strategy=STRATEGY_UNSPECIFIED&key={{VITE_API_KEY}}",
-		"method": "GET",
-		"sortNum": 10000,
-		"created": "2022-08-25T21:02:58.691Z",
-		"modified": "2022-08-25T21:02:58.691Z",
-		"headers": [],
-		"params": [
-			{
-				"name": "url",
-				"value": "https://reinhold.is",
-				"isPath": false
-			},
-			{
-				"name": "strategy",
-				"value": "STRATEGY_UNSPECIFIED",
-				"isPath": false
-			},
-			{
-				"name": "key",
-				"value": "{{VITE_API_KEY}}",
-				"isPath": false
-			}
-		],
-		"tests": []
-	},
-	{
 		"_id": "5c3cf640-a6e3-478b-909a-392c39a28c37",
 		"colId": "61dea468-c567-4be5-92e1-0550fd2cc7a6",
 		"containerId": "",

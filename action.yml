@@ -16,9 +16,9 @@ inputs:
     description: The optional API Key created at the Google Developer Console
     required: false
   strategy:
-    description: Analyse on 'desktop', 'mobile' or 'both' (default)
+    description: Analyse on 'desktop' (default), 'mobile' or 'both'
     required: false
-    default: 'both'
+    default: 'desktop'
   runs:
     description: The number of times to analyse the site
     required: false

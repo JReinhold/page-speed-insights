@@ -3,6 +3,7 @@
 	"exclude": ["dist/"],
 	"compilerOptions": {
 		"noUnusedLocals": false, // handled by eslint
-		"noUnusedParameters": false // handled by eslint
+		"noUnusedParameters": false, // handled by eslint
+		"resolveJsonModule": true
 	}
 }

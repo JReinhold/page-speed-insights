@@ -751,12 +751,12 @@ var require_lib = __commonJS({
             throw new Error("Client has already been disposed.");
           }
           const parsedUrl = new URL(requestUrl);
-          let info = this._prepareRequest(verb, parsedUrl, headers);
+          let info2 = this._prepareRequest(verb, parsedUrl, headers);
           const maxTries = this._allowRetries && RetryableHttpVerbs.includes(verb) ? this._maxRetries + 1 : 1;
           let numTries = 0;
           let response;
           do {
-            response = yield this.requestRaw(info, data);
+            response = yield this.requestRaw(info2, data);
             if (response && response.message && response.message.statusCode === HttpCodes2.Unauthorized) {
               let authenticationHandler;
               for (const handler of this.handlers) {
@@ -766,7 +766,7 @@ var require_lib = __commonJS({
                 }
               }
               if (authenticationHandler) {
-                return authenticationHandler.handleAuthentication(this, info, data);
+                return authenticationHandler.handleAuthentication(this, info2, data);
               } else {
                 return response;
               }
@@ -789,8 +789,8 @@ var require_lib = __commonJS({
                   }
                 }
               }
-              info = this._prepareRequest(verb, parsedRedirectUrl, headers);
-              response = yield this.requestRaw(info, data);
+              info2 = this._prepareRequest(verb, parsedRedirectUrl, headers);
+              response = yield this.requestRaw(info2, data);
               redirectsRemaining--;
             }
             if (!response.message.statusCode || !HttpResponseRetryCodes.includes(response.message.statusCode)) {
@@ -811,7 +811,7 @@ var require_lib = __commonJS({
         }
         this._disposed = true;
       }
-      requestRaw(info, data) {
+      requestRaw(info2, data) {
         return __awaiter(this, void 0, void 0, function* () {
           return new Promise((resolve, reject) => {
             function callbackForResult(err, res) {
@@ -823,16 +823,16 @@ var require_lib = __commonJS({
                 resolve(res);
               }
             }
-            this.requestRawWithCallback(info, data, callbackForResult);
+            this.requestRawWithCallback(info2, data, callbackForResult);
           });
         });
       }
-      requestRawWithCallback(info, data, onResult) {
+      requestRawWithCallback(info2, data, onResult) {
         if (typeof data === "string") {
-          if (!info.options.headers) {
-            info.options.headers = {};
+          if (!info2.options.headers) {
+            info2.options.headers = {};
           }
-          info.options.headers["Content-Length"] = Buffer.byteLength(data, "utf8");
+          info2.options.headers["Content-Length"] = Buffer.byteLength(data, "utf8");
         }
         let callbackCalled = false;
         function handleResult(err, res) {
@@ -841,7 +841,7 @@ var require_lib = __commonJS({
             onResult(err, res);
           }
         }
-        const req = info.httpModule.request(info.options, (msg) => {
+        const req = info2.httpModule.request(info2.options, (msg) => {
           const res = new HttpClientResponse(msg);
           handleResult(void 0, res);
         });
@@ -853,7 +853,7 @@ var require_lib = __commonJS({
           if (socket) {
             socket.end();
           }
-          handleResult(new Error(`Request timeout: ${info.options.path}`));
+          handleResult(new Error(`Request timeout: ${info2.options.path}`));
         });
         req.on("error", function(err) {
           handleResult(err);
@@ -875,27 +875,27 @@ var require_lib = __commonJS({
         return this._getAgent(parsedUrl);
       }
       _prepareRequest(method, requestUrl, headers) {
-        const info = {};
-        info.parsedUrl = requestUrl;
-        const usingSsl = info.parsedUrl.protocol === "https:";
-        info.httpModule = usingSsl ? https : http;
+        const info2 = {};
+        info2.parsedUrl = requestUrl;
+        const usingSsl = info2.parsedUrl.protocol === "https:";
+        info2.httpModule = usingSsl ? https : http;
         const defaultPort = usingSsl ? 443 : 80;
-        info.options = {};
-        info.options.host = info.parsedUrl.hostname;
-        info.options.port = info.parsedUrl.port ? parseInt(info.parsedUrl.port) : defaultPort;
-        info.options.path = (info.parsedUrl.pathname || "") + (info.parsedUrl.search || "");
-        info.options.method = method;
-        info.options.headers = this._mergeHeaders(headers);
+        info2.options = {};
+        info2.options.host = info2.parsedUrl.hostname;
+        info2.options.port = info2.parsedUrl.port ? parseInt(info2.parsedUrl.port) : defaultPort;
+        info2.options.path = (info2.parsedUrl.pathname || "") + (info2.parsedUrl.search || "");
+        info2.options.method = method;
+        info2.options.headers = this._mergeHeaders(headers);
         if (this.userAgent != null) {
-          info.options.headers["user-agent"] = this.userAgent;
+          info2.options.headers["user-agent"] = this.userAgent;
         }
-        info.options.agent = this._getAgent(info.parsedUrl);
+        info2.options.agent = this._getAgent(info2.parsedUrl);
         if (this.handlers) {
           for (const handler of this.handlers) {
-            handler.prepareRequest(info.options);
+            handler.prepareRequest(info2.options);
           }
         }
-        return info;
+        return info2;
       }
       _mergeHeaders(headers) {
         if (this.requestOptions && this.requestOptions.headers) {
@@ -1599,10 +1599,10 @@ Support boolean input list: \`true | True | TRUE | false | False | FALSE\``);
       command_1.issueCommand("notice", utils_1.toCommandProperties(properties), message instanceof Error ? message.toString() : message);
     }
     exports.notice = notice;
-    function info(message) {
+    function info2(message) {
       process.stdout.write(message + os.EOL);
     }
-    exports.info = info;
+    exports.info = info2;
     function startGroup(name) {
       command_1.issue("group", name);
     }
@@ -1666,18 +1666,89 @@ var import_core4 = __toESM(require_core());
 var import_core2 = __toESM(require_core());
 var import_http_client = __toESM(require_lib());
 
+// src/lib/types.ts
+var import_zod = require("zod");
+var dateString = import_zod.z.preprocess((dateString2) => typeof dateString2 === "string" && new Date(dateString2), import_zod.z.date());
+var baseAudit = import_zod.z.object({
+  title: import_zod.z.string(),
+  description: import_zod.z.string(),
+  score: import_zod.z.number().nullable(),
+  displayValue: import_zod.z.string().optional(),
+  numericValue: import_zod.z.number().optional(),
+  scoreDisplayMode: import_zod.z.string(),
+  numericUnit: import_zod.z.string().optional()
+});
+var audit = baseAudit.extend({
+  title: import_zod.z.string(),
+  description: import_zod.z.string(),
+  score: import_zod.z.number(),
+  scoreDisplayMode: import_zod.z.string(),
+  displayValue: import_zod.z.string(),
+  numericValue: import_zod.z.number(),
+  numericUnit: import_zod.z.string()
+});
+var apiResponse = import_zod.z.object({
+  lighthouseResult: import_zod.z.object({
+    audits: import_zod.z.object({
+      "first-contentful-paint": audit,
+      interactive: audit,
+      "speed-index": audit,
+      "total-blocking-time": audit,
+      "largest-contentful-paint": audit,
+      "cumulative-layout-shift": audit,
+      "screenshot-thumbnails": baseAudit.extend({
+        score: import_zod.z.null(),
+        displayValue: import_zod.z.undefined(),
+        numericValue: import_zod.z.undefined(),
+        details: import_zod.z.object({
+          scale: import_zod.z.number(),
+          items: import_zod.z.array(import_zod.z.object({
+            timing: import_zod.z.number(),
+            timestamp: import_zod.z.number(),
+            data: import_zod.z.string()
+          }))
+        })
+      }),
+      "full-page-screenshot": baseAudit.extend({
+        details: import_zod.z.object({
+          screenshot: import_zod.z.object({
+            data: import_zod.z.string(),
+            width: import_zod.z.number(),
+            height: import_zod.z.number()
+          })
+        })
+      })
+    }),
+    categories: import_zod.z.object({ performance: import_zod.z.object({ score: import_zod.z.number() }) }),
+    timing: import_zod.z.object({ total: import_zod.z.number() })
+  })
+});
+var parsedApiResponseToAnalysisResult = (parsedResponse) => ({
+  score: parsedResponse.lighthouseResult.categories.performance.score,
+  metrics: {
+    firstContentfulPaint: Math.round(parsedResponse.lighthouseResult.audits["first-contentful-paint"].numericValue),
+    timeToInteractive: Math.round(parsedResponse.lighthouseResult.audits.interactive.numericValue),
+    speedIndex: Math.round(parsedResponse.lighthouseResult.audits["speed-index"].numericValue),
+    totalBlockingTime: Math.round(parsedResponse.lighthouseResult.audits["total-blocking-time"].numericValue),
+    largestContentfulPaint: Math.round(parsedResponse.lighthouseResult.audits["largest-contentful-paint"].numericValue),
+    cumulativeLayoutShift: Math.round(parsedResponse.lighthouseResult.audits["cumulative-layout-shift"].numericValue)
+  },
+  screenshots: parsedResponse.lighthouseResult.audits["screenshot-thumbnails"].details.items.map(({ timing, data }) => ({ timing, data })),
+  timing: parsedResponse.lighthouseResult.timing.total
+});
+
 // src/lib/utils.ts
 var import_core = __toESM(require_core());
 var maskedApiKey = (s) => {
   const key = (0, import_core.getInput)("key");
-  return key ? s.replaceAll(key, `***${key == null ? void 0 : key.slice(-3)}`) : s;
+  return key ? s.replaceAll(key, `***${key.slice(-3)}`) : s;
 };
 var maskedDebug = (message) => (0, import_core.debug)(maskedApiKey(message));
 
 // src/lib/analyse.ts
 var httpClient = new import_http_client.HttpClient();
 var STRATEGY_PARAMETER_MAP = {
-  both: "STRATEGY_UNSPECIFIED",
+  both: "BOTH",
   desktop: "DESKTOP",
   mobile: "MOBILE"
 };
@@ -1685,6 +1756,8 @@ var analyse = async (inputs) => {
   if (inputs.runs === 1) {
     (0, import_core2.debug)("Analysing a single run");
     return analyseSingleRun(inputs);
+  } else {
+    throw new Error("multiple runs not supported yet");
   }
 };
 var analyseSingleRun = async (inputs) => {
@@ -1703,21 +1776,32 @@ var analyseSingleRun = async (inputs) => {
     (0, import_core2.error)("Error occurred while calling the PageSpeed Insights API:");
     if (err instanceof import_http_client.HttpClientError) {
       if (err.statusCode === import_http_client.HttpCodes.TooManyRequests) {
-        (0, import_core2.error)("Quota limit exceeded. Either you're not using an API key, or you've made too many calls with this API key. Try again later.");
+        (0, import_core2.error)(`Quota limit exceeded. Either you're not using an API key, or you've made too many calls with this API key. Try again later.
+${err.message}`);
       }
-      (0, import_core2.error)(err);
     } else if (err instanceof Error) {
-      (0, import_core2.error)("Unknown error");
-      (0, import_core2.error)(err.message);
+      (0, import_core2.error)(`Unknown error:
+${err.message}`);
     } else {
-      (0, import_core2.error)("Unknown error");
-      (0, import_core2.error)(err);
+      (0, import_core2.error)(`Unknown error:
+${err}`);
     }
     throw err;
   }
   const postTime = Date.now();
   (0, import_core2.debug)(`Response from PageSpeed Insights API after ${(postTime - preTime) / 1e3} seconds`);
   (0, import_core2.debug)(`Status: ${response.statusCode}`);
+  const parseResult = apiResponse.safeParse(response.result);
+  if (!parseResult.success) {
+    (0, import_core2.error)(`Error parsing the response, it's structure was unexpected. This probably means the PageSpeed Insights API have changed,
+are you using the latest version of the action?
+Parse error: ${JSON.stringify(parseResult.error.format())}`);
+    throw parseResult.error;
+  }
+  const analysisResult = parsedApiResponseToAnalysisResult(parseResult.data);
+  (0, import_core2.debug)("AnalysisResult:");
+  (0, import_core2.debug)(JSON.stringify(analysisResult));
+  return analysisResult;
 };
 
 // src/lib/get-inputs.ts
@@ -1767,10 +1851,14 @@ var getInputs = () => {
 var run = async () => {
   try {
     const inputs = getInputs();
-    await analyse(inputs);
+    const analysisResult = await analyse(inputs);
+    (0, import_core4.info)(JSON.stringify(analysisResult));
   } catch (error2) {
-    if (error2 instanceof Error)
+    if (error2 instanceof Error) {
       (0, import_core4.setFailed)(error2.message);
+    } else {
+      (0, import_core4.setFailed)(error2);
+    }
   }
 };
 
